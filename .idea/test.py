@@ -1,50 +1,12 @@
-# import threading
-# from time import sleep, ctime
-#
-# loops = [ 4, 2 ]
-#
-# class ThreadFunc(object):
-#
-#   def __init__(self, func, args, name=''):
-#     self.name = name
-#     self.func = func
-#     self.args = args
-#
-#   def __call__(self):
-#     apply(self.func, self.args)
-#
-# def loop(nloop, nsec):
-#   print 'start loop', nloop, 'at:', ctime()
-#   sleep(nsec)
-#   print 'loop', nloop, 'done at:', ctime()
-#
-# def main():
-#   print 'starting at:', ctime()
-#   threads = []
-#   nloops = range(len(loops))
-#
-#   for i in nloops:  # create all threads
-#     t = threading.Thread(target=ThreadFunc(loop, (i, loops[i]), loop.__name__))
-#     threads.append(t)
-#
-#   for i in nloops:  # start all threads
-#     threads[i].start()
-#
-#   for i in nloops:  # wait for completion
-#     threads[i].join()
-#
-#   print 'all DONE at:', ctime()
-#
-# if __name__ == '__main__':
-#   main()
-# class dd():
-#     def __init__(self):
-#         self.a = 1
-# b = dd()
-# a=[b,2,3]
-# del a[0]
-# print b.a
-if not None:
-    print 1
-else:
-    print 2
+# status
+#               1:pre_test
+#               2:being under test
+#               3:after_test
+
+class test():
+    def __init__(self, pre_test=2, under_test= 5, after_test=3):
+        self.pre_test = pre_test
+        self.under_test = under_test
+        self.after_test = after_test
+        self.status = 1
+

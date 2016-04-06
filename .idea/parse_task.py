@@ -15,15 +15,18 @@ class Arc(object):
         self.type = type
         self.task_end = task_end
 
-
+# task::status        0:not waken
+#                     1:running
+#                     2:stalled
 class Task(object):
     def __init__(self, task_id, type):
         self.task_id = task_id
         self.type = type
         self.child = []
         self.parent = []
-        self.runtime_required = 2
+        self.runtime_required = 10
         self.runtime = 0
+        self.status = 0
         self.finished = 0
 
     def is_executable(self):
@@ -47,7 +50,7 @@ def core_allocation(task, CORES):
     # while (CORES[core_num].task_len >= 10):
     #     core_num = randint(0, 9)
     CORES[core_num].task_list.append(task)
-    CORES[core_num].task_len += 1;
+    # CORES[core_num].task_len += 1;
 
 
 def parse_task(file, CORES, GRAPHS):
