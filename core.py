@@ -5,8 +5,8 @@
 #               1:not breakable
 
 
-class core(object):
-    def __init__(self, core_id,type=0, test_weight=1.5):
+class Core(object):
+    def __init__(self, core_id, type=0):
         self.core_id = core_id
         self.task_list = []
         # self.task_len = 0
@@ -14,4 +14,3 @@ class core(object):
         self.test_status = 0
         self.type = type
         self.test = None
-        self.test_weight = test_weight
