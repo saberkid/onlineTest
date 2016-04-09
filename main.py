@@ -76,7 +76,7 @@ def is_test_finished():
 
 def is_task_finished():
     for i in xrange(len(CORES1)):
-        if len(CORES1[i].task_list):
+        if CORES1[i].status:
             return 0
     return 1
 
@@ -96,6 +96,7 @@ def core_for_test():
 
 def test_dispatch():
     global TESTING
+    global TEST_TIME
     if TESTING.test.status == 1:        #pre_test
         if TESTING.type:                #unbreakable
             if not TESTING.status:
@@ -108,6 +109,7 @@ def test_dispatch():
                 TESTING.test.status = 2
 
     elif TESTING.test.status == 2:          #under test
+         TEST_TIME += 1
          if TESTING.type:                    #unbreakable
             TESTING.test.under_test -= 1
             if TESTING.test.under_test <= 0 and TESTING.status == None:
@@ -134,9 +136,13 @@ def run_graph():
     global TEST_FINISHED
     global TASK_FINISHED
     global TESTING
+    global TEST_TIME
+    global TEST_FINISHED_TIME
+    global TASK_FINISHED_TIME
     CYCLE = 0
     TEST_FINISHED = 0
     TASK_FINISHED = 0
+    TEST_TIME = 0
     test_recording = 1
     task_recording = 1
     while not (TASK_FINISHED and TEST_FINISHED):
@@ -155,14 +161,14 @@ def run_graph():
         TEST_FINISHED = is_test_finished()
         TASK_FINISHED = is_task_finished()
         if TEST_FINISHED and test_recording:
-            test_finished_time = CYCLE
+            TEST_FINISHED_TIME = CYCLE
             test_recording = 0
         if TASK_FINISHED and task_recording:
-            task_finished_time = CYCLE
+            TASK_FINISHED_TIME = CYCLE
             task_recording = 0
-        build_log()
-    print task_finished_time
-    print test_finished_time
+        # build_log()
+    # print task_finished_time
+    # print test_finished_time
 
 
 def run_graph_2():
@@ -184,8 +190,12 @@ def run_graph_2():
                  CORES2[i].status.runtime += 1
                  if CORES2[i].status.is_finished():
                      CORES2[i].status = None
-    print CYCLE
-
+        # print "cycle%d*********\n"%CYCLE
+        # for i in xrange(len(CORES1)):
+        #     if CORES2[i].status:
+        #         print "core" + str(i) + ":" + CORES2[i].status.task_id + "\n"
+        #     else:
+        #         print "core" + str(i) + ":"+ "vacant\n"
 
 def init():
     global CORES1
@@ -196,10 +206,23 @@ def init():
         else:
             CORES1.append(Core(i+1, 0))
 
+
+def write_log():
+    res_seq = []
+    res_seq.append("TEST MODE--------------------\n")
+    res_seq.append("Task is finished at cycle:%d\n" % TASK_FINISHED_TIME)
+    res_seq.append("Test is finished at cycle:%d\n" % TEST_FINISHED_TIME)
+    res_seq.append("Total test time cycle is: %d\n" % TEST_TIME)
+    res_seq.append("COMMON MODE--------------------\n")
+    res_seq.append("Task is finished at cycle:%d\n" % CYCLE)
+    return res_seq
+
 if __name__ == '__main__':
     global TEST_DIC
+
     TEST_DIC = test_dic_init()
-    filename = raw_input("ENTER YOUR TG FILENAME:\n")
+    filename = "config.tgff"
+        # raw_input("ENTER YOUR TG FILENAME:\n")
     file_object = open(filename)
     try:
         tgff_file = file_object.read()
@@ -211,5 +234,8 @@ if __name__ == '__main__':
     CORES2 = copy.deepcopy(CORES1)
     run_graph()
     run_graph_2()
+    file_write = open('result', 'a')
+    file_write.writelines(write_log())
+    file_write.close()
 
 
